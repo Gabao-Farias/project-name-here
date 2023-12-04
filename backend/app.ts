@@ -25,7 +25,6 @@ app.post("/users", (req: Request, res: Response) => {
   res.status(200).json(users);
 });
 
-// Endpoint to get machine health score
 app.post("/auth/signup", async (req: Request, res: Response) => {
   try {
     const hashedPassword = await hash(req?.body.password, 10);
