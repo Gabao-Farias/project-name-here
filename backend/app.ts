@@ -27,6 +27,14 @@ app.post("/users", (req: Request, res: Response) => {
 });
 
 app.post("/auth/signup", async (req: Request, res: Response) => {
+  const userName = req.body.name;
+
+  const user = users.find((user) => user.name === userName);
+
+  if (user) {
+    return res.status(409).send("Name already taken");
+  }
+
   try {
     const hashedPassword = await hash(req?.body.password, 10);
 
