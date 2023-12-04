@@ -3,6 +3,7 @@ import "dotenv/config";
 import express, { Request, Response } from "express";
 import { sign } from "jsonwebtoken";
 import { getMachineHealth } from "./machineHealth";
+import { authenticateToken } from "./src/middlewares";
 
 const app = express();
 const port = 3001;
@@ -13,14 +14,18 @@ const users: any[] = [];
 app.use(express.json());
 
 // Endpoint to get machine health score
-app.post("/machine-health", (req: Request, res: Response) => {
-  const result = getMachineHealth(req);
-  if (result.error) {
-    res.status(400).json(result);
-  } else {
-    res.json(result);
+app.post(
+  "/machine-health",
+  authenticateToken,
+  (req: Request, res: Response) => {
+    const result = getMachineHealth(req);
+    if (result.error) {
+      res.status(400).json(result);
+    } else {
+      res.json(result);
+    }
   }
-});
+);
 
 app.post("/users", (req: Request, res: Response) => {
   res.status(200).json(users);
