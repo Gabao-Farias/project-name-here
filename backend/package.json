@@ -4,7 +4,7 @@
   "description": "A Node.js API for assessing the health of machines based on their individual parts' conditions.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --exec ts-node app.ts",
+    "start": "nodemon --exec ts-node --transpile-only app.ts",
     "test": "jest",
     "deploy": "ntl deploy --prod",
     "build": "tsc"
