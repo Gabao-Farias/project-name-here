@@ -4,6 +4,7 @@ import express, { Request, Response } from "express";
 import { sign } from "jsonwebtoken";
 import { getMachineHealth } from "./functions";
 import { authenticateToken } from "./middlewares";
+import { DEFAULT_ACCESS_TOKEN_EXPIRES_IN } from "./utils";
 
 const app = express();
 const port = 3001;
@@ -77,7 +78,9 @@ app.post("/auth/signin", async (req: Request, res: Response) => {
     const reqUser = { name: userName };
     const jwtSecret = process.env.ACCESS_TOKEN_SECRET || "";
 
-    const accessToken = sign(reqUser, jwtSecret);
+    const accessToken = sign(reqUser, jwtSecret, {
+      expiresIn: DEFAULT_ACCESS_TOKEN_EXPIRES_IN,
+    });
 
     return res.status(200).json({ accessToken });
   } catch (error) {
