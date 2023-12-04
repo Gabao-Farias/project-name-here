@@ -2,7 +2,7 @@ import { compare, hash } from "bcrypt";
 import "dotenv/config";
 import express, { Request, Response } from "express";
 import { sign } from "jsonwebtoken";
-import { getMachineHealth } from "./machineHealth";
+import { getMachineHealth } from "./src/functions";
 import { authenticateToken } from "./src/middlewares";
 
 const app = express();
