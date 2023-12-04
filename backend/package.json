@@ -2,9 +2,9 @@
   "name": "bellsant-machine-assessment-api",
   "version": "1.0.0",
   "description": "A Node.js API for assessing the health of machines based on their individual parts' conditions.",
-  "main": "app.js",
+  "main": "./src/index.ts",
   "scripts": {
-    "start": "nodemon --exec ts-node --transpile-only app.ts",
+    "start": "nodemon --exec ts-node --transpile-only ./src/index.ts",
     "test": "jest",
     "deploy": "ntl deploy --prod",
     "build": "tsc"

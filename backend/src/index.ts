@@ -2,8 +2,8 @@ import { compare, hash } from "bcrypt";
 import "dotenv/config";
 import express, { Request, Response } from "express";
 import { sign } from "jsonwebtoken";
-import { getMachineHealth } from "./src/functions";
-import { authenticateToken } from "./src/middlewares";
+import { getMachineHealth } from "./functions";
+import { authenticateToken } from "./middlewares";
 
 const app = express();
 const port = 3001;
