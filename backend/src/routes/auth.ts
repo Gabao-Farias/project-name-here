@@ -1,9 +1,12 @@
 import { compare, hash } from "bcrypt";
 import "dotenv/config";
 import { Request, Response, Router } from "express";
-import { sign } from "jsonwebtoken";
-import { users } from "../database";
-import { DEFAULT_ACCESS_TOKEN_EXPIRES_IN } from "../utils";
+import { verify } from "jsonwebtoken";
+import { refreshTokens, users } from "../database";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/security/jwt";
 
 const authRouter = Router();
 
@@ -51,16 +54,46 @@ authRouter.post("/signin", async (req: Request, res: Response) => {
     }
 
     const reqUser = { name: userName };
-    const jwtSecret = process.env.ACCESS_TOKEN_SECRET || "";
 
-    const accessToken = sign(reqUser, jwtSecret, {
-      expiresIn: DEFAULT_ACCESS_TOKEN_EXPIRES_IN,
-    });
+    const accessToken = generateAccessToken(reqUser);
+    const refreshToken = generateRefreshToken(reqUser);
 
-    return res.status(200).json({ accessToken });
+    refreshTokens.push(refreshToken);
+
+    return res.status(200).json({ accessToken, refreshToken });
   } catch (error) {
     res.status(500).send();
   }
+});
+
+authRouter.post("/token", async (req: Request, res: Response) => {
+  const refreshToken = req.body.refreshToken;
+
+  if (!refreshToken) {
+    return res.sendStatus(401);
+  }
+
+  const refreshTokenExists = refreshTokens.includes(refreshToken);
+
+  if (!refreshTokenExists) {
+    return res.sendStatus(403);
+  }
+
+  const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || "";
+
+  verify(refreshToken, refreshTokenSecret, (err: any, user: any) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
+    if (!user) {
+      return res.sendStatus(403);
+    }
+
+    const accessToken = generateAccessToken({ name: user.name });
+
+    res.json({ accessToken });
+  });
 });
 
 export { authRouter };
