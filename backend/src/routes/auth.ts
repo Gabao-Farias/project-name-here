@@ -1,7 +1,7 @@
 import { compare, hash } from "bcrypt";
 import { Request, Response, Router } from "express";
 import { verify } from "jsonwebtoken";
-import { refreshTokens, users } from "../database";
+import { User, refreshTokens, userRepository } from "../database";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -10,25 +10,26 @@ import {
 const authRouter = Router();
 
 authRouter.post("/signup", async (req: Request, res: Response) => {
-  const userName = req.body.name;
+  const requestedUserEmail = req.body.email;
 
-  const user = users.find((user) => user.name === userName);
+  const userFound = await userRepository.findOne({
+    where: {
+      email: requestedUserEmail,
+    },
+  });
 
-  if (user) {
-    return res.status(409).send("Name already taken");
+  if (userFound) {
+    return res.status(409).send("Email invalid or unavailable");
   }
 
   try {
     const hashedPassword = await hash(req?.body.password, 10);
 
-    const user = {
-      name: req.body.name,
-      password: hashedPassword,
-    };
+    const newUser = new User();
+    newUser.email = req.body.email;
+    newUser.password = hashedPassword;
 
-    users.push(user);
-
-    console.log(users);
+    await userRepository.insert(newUser);
 
     res.status(201).send();
   } catch (error) {
@@ -37,22 +38,28 @@ authRouter.post("/signup", async (req: Request, res: Response) => {
 });
 
 authRouter.post("/signin", async (req: Request, res: Response) => {
-  const userName = req.body.name;
+  const requestedUserEmail = req.body.email || "";
 
-  const user = users.find((user) => user.name === userName);
+  const userFound = await userRepository.findOne({
+    where: {
+      email: requestedUserEmail,
+    },
+  });
 
-  if (user === undefined) {
-    return res.status(400).send("User not found");
+  console.log(userFound);
+
+  if (!userFound) {
+    return res.status(400).send("User name or password incorrect");
   }
 
   try {
-    const passwordMatch = await compare(req.body.password, user.password);
+    const passwordMatch = await compare(req.body.password, userFound.password);
 
     if (!passwordMatch) {
       return res.status(403).send("User name or password incorrect");
     }
 
-    const reqUser = { name: userName };
+    const reqUser = { userId: userFound.user_id };
 
     const accessToken = generateAccessToken(reqUser);
     const refreshToken = generateRefreshToken(reqUser);
