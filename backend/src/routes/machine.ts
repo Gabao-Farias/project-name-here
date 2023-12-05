@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { Request, Response, Router } from "express";
 import { getMachineHealth } from "../functions";
 import { authenticateToken } from "../middlewares";

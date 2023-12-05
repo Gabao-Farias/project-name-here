@@ -1,5 +1,4 @@
 import { compare, hash } from "bcrypt";
-import "dotenv/config";
 import { Request, Response, Router } from "express";
 import { verify } from "jsonwebtoken";
 import { refreshTokens, users } from "../database";
