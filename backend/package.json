@@ -7,7 +7,11 @@
     "start": "nodemon --exec ts-node --transpile-only ./src/index.ts",
     "test": "jest",
     "deploy": "ntl deploy --prod",
-    "build": "tsc"
+    "build": "tsc",
+    "typeorm": "npx typeorm-ts-node-commonjs",
+    "migrations:run": "yarn typeorm migration:run -- --d ./src/database/datasource.ts",
+    "migrations:revert": "yarn typeorm migration:revert -- --d ./src/database/datasource.ts",
+    "migrations:generate": "yarn typeorm migration:generate ./src/database/migrations/Migration -d ./src/database/datasource.ts"
   },
   "keywords": [],
   "author": "BellSant",
