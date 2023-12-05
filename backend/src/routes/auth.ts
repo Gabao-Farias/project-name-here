@@ -95,4 +95,20 @@ authRouter.post("/token", async (req: Request, res: Response) => {
   });
 });
 
+authRouter.delete("/signout", async (req: Request, res: Response) => {
+  const refreshToken = req.body.refreshToken;
+
+  const refreshTokenIdx = refreshTokens.findIndex(
+    (token) => token === refreshToken
+  );
+
+  if (refreshTokenIdx === -1) {
+    return res.sendStatus(403);
+  }
+
+  refreshTokens.splice(refreshTokenIdx, 1);
+
+  return res.sendStatus(204);
+});
+
 export { authRouter };
