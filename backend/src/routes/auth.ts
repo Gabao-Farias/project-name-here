@@ -1,7 +1,13 @@
 import { compare, hash } from "bcrypt";
 import { Request, Response, Router } from "express";
 import { verify } from "jsonwebtoken";
-import { User, refreshTokens, userRepository } from "../database";
+import {
+  RefreshToken,
+  User,
+  refreshTokenRepository,
+  userRepository,
+} from "../database";
+import { authenticateToken } from "../middlewares";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -46,8 +52,6 @@ authRouter.post("/signin", async (req: Request, res: Response) => {
     },
   });
 
-  console.log(userFound);
-
   if (!userFound) {
     return res.status(400).send("User name or password incorrect");
   }
@@ -59,12 +63,18 @@ authRouter.post("/signin", async (req: Request, res: Response) => {
       return res.status(403).send("User name or password incorrect");
     }
 
-    const reqUser = { userId: userFound.user_id };
+    const reqUser: Partial<JWTDefaultDecryptedValues> = {
+      user_id: userFound.user_id,
+    };
 
     const accessToken = generateAccessToken(reqUser);
     const refreshToken = generateRefreshToken(reqUser);
 
-    refreshTokens.push(refreshToken);
+    const newRefreshToken = new RefreshToken();
+    newRefreshToken.refresh_token = refreshToken;
+    newRefreshToken.user_id = userFound.user_id;
+
+    await refreshTokenRepository.insert(newRefreshToken);
 
     return res.status(200).json({ accessToken, refreshToken });
   } catch (error) {
@@ -79,9 +89,11 @@ authRouter.post("/token", async (req: Request, res: Response) => {
     return res.sendStatus(401);
   }
 
-  const refreshTokenExists = refreshTokens.includes(refreshToken);
+  const refreshTokenFound = await refreshTokenRepository.findOne({
+    where: { refresh_token: refreshToken },
+  });
 
-  if (!refreshTokenExists) {
+  if (!refreshTokenFound) {
     return res.sendStatus(403);
   }
 
@@ -102,20 +114,28 @@ authRouter.post("/token", async (req: Request, res: Response) => {
   });
 });
 
-authRouter.delete("/signout", async (req: Request, res: Response) => {
-  const refreshToken = req.body.refreshToken;
+authRouter.delete(
+  "/signout",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    const requestedUserId = req.user?.user_id;
 
-  const refreshTokenIdx = refreshTokens.findIndex(
-    (token) => token === refreshToken
-  );
+    const refreshTokenFound = await refreshTokenRepository.findOne({
+      where: {
+        user_id: requestedUserId,
+      },
+    });
 
-  if (refreshTokenIdx === -1) {
-    return res.sendStatus(403);
+    if (!refreshTokenFound) {
+      return res.sendStatus(403);
+    }
+
+    await refreshTokenRepository.delete({
+      user_id: requestedUserId,
+    });
+
+    return res.sendStatus(204);
   }
-
-  refreshTokens.splice(refreshTokenIdx, 1);
-
-  return res.sendStatus(204);
-});
+);
 
 export { authRouter };
