@@ -20,7 +20,7 @@ export const authenticateToken = (
       return res.sendStatus(403);
     }
 
-    req.user = user;
+    req.user = user as JWTDefaultDecryptedValues;
 
     next();
   });
