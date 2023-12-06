@@ -13,12 +13,13 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | undefined>();
 
   const signIn = async (props: AuthSignInRequestBody) => {
+    const { email } = props;
     const { accessToken, refreshToken } = await AuthAxios.signIn(props);
 
     await SecureStore.setValue("ACCESS_TOKEN", accessToken);
     await SecureStore.setValue("REFRESH_TOKEN", refreshToken);
 
-    setUser({ email: "batatao@gas.cs" });
+    setUser({ email });
   };
 
   return (
