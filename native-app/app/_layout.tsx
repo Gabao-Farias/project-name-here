@@ -21,11 +21,14 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    ReactotronService.init();
     if (loaded) {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useEffect(() => {
+    ReactotronService.init();
+  }, []);
 
   if (!loaded) {
     return null;
