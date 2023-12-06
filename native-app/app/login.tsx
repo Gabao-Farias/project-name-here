@@ -1,5 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import { Button, StyleSheet, TextInput } from "react-native";
+import Loading from "../components/Loading";
 import { Text, View } from "../components/Themed";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -25,7 +26,7 @@ const LoginScreen: FC<Props> = () => {
   if (refreshingToken) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Loading...</Text>
+        <Loading />
       </View>
     );
   }
