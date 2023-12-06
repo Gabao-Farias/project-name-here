@@ -1,5 +1,4 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import reactotron from "reactotron-react-native";
 import { MachineAxios } from "../../api";
 import { AsyncStorage } from "../../services";
 import { RootState } from "../root";
@@ -40,10 +39,6 @@ export const loadMachineValuesAsync = createAsyncThunk(
       const unparsedJOSN = await AsyncStorage.getValue("MACHINE_VALUES");
 
       const data = JSON.parse(unparsedJOSN) as MachineValues;
-
-      if (reactotron.log) {
-        reactotron.log({ data });
-      }
 
       return data;
     } catch (error) {
