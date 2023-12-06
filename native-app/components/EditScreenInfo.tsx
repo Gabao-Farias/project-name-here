@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Button, Platform, StyleSheet, TextInput } from "react-native";
+import { Button, StyleSheet, TextInput } from "react-native";
 
 import { useMachineData } from "../app/useMachineData";
 import { MachineType } from "../data/types";
@@ -78,10 +78,6 @@ export default function EditScreenInfo({ path }: { path: string }) {
       label: "Software Version",
     },
   ];
-
-  const apiUrl: string = `http://${
-    Platform?.OS === "android" ? "10.0.2.2" : "localhost"
-  }:3001/machine-health`;
 
   const savePart = useCallback(async () => {
     try {
