@@ -1,15 +1,23 @@
 import { Link, useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import { Button, StyleSheet } from "react-native";
-import { MachineAxios } from "../../api";
+import Loading from "../../components/Loading";
 import { MachineScore } from "../../components/MachineScore";
 import { PartsOfMachine } from "../../components/PartsOfMachine";
 import { Text, View } from "../../components/Themed";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import {
+  fetchMachineHealthAsync,
+  getFetchMachineHealthStatus,
+  getMachineHealth,
+} from "../../stores/slices";
 import { useMachineData } from "../useMachineData";
 
 export default function StateScreen() {
-  const { machineData, resetMachineData, loadMachineData, setScores } =
-    useMachineData();
+  const { machineData, resetMachineData, loadMachineData } = useMachineData();
+  const machineHealth = useAppSelector(getMachineHealth);
+  const fetchMachineHealthStatus = useAppSelector(getFetchMachineHealthStatus);
+  const dispatch = useAppDispatch();
 
   //Doing this because we're not using central state like redux
   useFocusEffect(
@@ -20,11 +28,7 @@ export default function StateScreen() {
 
   const calculateHealth = useCallback(async () => {
     try {
-      const data = await MachineAxios.machineHealth(machineData);
-
-      if (data.factory) {
-        setScores(data);
-      }
+      await dispatch(fetchMachineHealthAsync(machineData));
     } catch (error) {
       console.error(error);
       console.log(
@@ -37,9 +41,13 @@ export default function StateScreen() {
     }
   }, [machineData]);
 
+  const isLoading = fetchMachineHealthStatus === "loading";
+
   return (
     <View style={styles.container}>
       <View style={styles.separator} />
+      {isLoading && <Loading />}
+
       {!machineData && (
         <Link href="/two" style={styles.link}>
           <Text style={styles.linkText}>
@@ -72,18 +80,18 @@ export default function StateScreen() {
           />
           <Text style={styles.title}>Factory Health Score</Text>
           <Text style={styles.text}>
-            {machineData?.scores?.factory
-              ? machineData?.scores?.factory
+            {machineHealth && machineHealth.factory
+              ? machineHealth.factory
               : "Not yet calculated"}
           </Text>
-          {machineData?.scores?.machineScores && (
+          {machineHealth && machineHealth.machineScores && (
             <>
               <Text style={styles.title2}>Machine Health Scores</Text>
-              {Object.keys(machineData?.scores?.machineScores).map((key) => (
+              {Object.keys(machineHealth.machineScores).map((key) => (
                 <MachineScore
                   key={key}
                   machineName={key}
-                  score={machineData?.scores?.machineScores[key]}
+                  score={machineHealth.machineScores[key]}
                 />
               ))}
             </>
