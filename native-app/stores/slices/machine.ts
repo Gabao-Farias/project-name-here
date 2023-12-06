@@ -1,17 +1,27 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import reactotron from "reactotron-react-native";
 import { MachineAxios } from "../../api";
+import { AsyncStorage } from "../../services";
 import { RootState } from "../root";
 
 export interface MachineSliceState {
   machineHealth?: MachineHealthResponseBody;
 
+  machineValues?: MachineValues;
+
   fetchMachineHealthStatus: AsyncCallStatus;
+
+  loadMachineValuesStatus: AsyncCallStatus;
 }
 
 const initialState: MachineSliceState = {
   machineHealth: undefined,
 
+  machineValues: undefined,
+
   fetchMachineHealthStatus: "idle",
+
+  loadMachineValuesStatus: "idle",
 };
 
 export const fetchMachineHealthAsync = createAsyncThunk(
@@ -23,10 +33,47 @@ export const fetchMachineHealthAsync = createAsyncThunk(
   }
 );
 
+export const loadMachineValuesAsync = createAsyncThunk(
+  "place/loadMachineValuesAsync",
+  async () => {
+    try {
+      const unparsedJOSN = await AsyncStorage.getValue("MACHINE_VALUES");
+
+      const data = JSON.parse(unparsedJOSN) as MachineValues;
+
+      if (reactotron.log) {
+        reactotron.log({ data });
+      }
+
+      return data;
+    } catch (error) {
+      return undefined;
+    }
+  }
+);
+
+const setMachineValuesReducer = (
+  state: MachineSliceState,
+  action: PayloadAction<MachineValues | undefined>
+) => {
+  const { payload } = action;
+
+  AsyncStorage.setValue("MACHINE_VALUES", JSON.stringify(payload));
+
+  state.machineValues = payload;
+};
+
+const resetMachineValuesReducer = (state: MachineSliceState) => {
+  state.machineValues = undefined;
+};
+
 export const machineSlice = createSlice({
   name: "machine",
   initialState,
-  reducers: {},
+  reducers: {
+    setMachineValues: setMachineValuesReducer,
+    resetMachineValues: resetMachineValuesReducer,
+  },
   extraReducers: (builder) =>
     builder
       .addCase(fetchMachineHealthAsync.pending, (state) => {
@@ -38,11 +85,29 @@ export const machineSlice = createSlice({
       })
       .addCase(fetchMachineHealthAsync.rejected, (state) => {
         state.fetchMachineHealthStatus = "failed";
+      })
+      .addCase(loadMachineValuesAsync.pending, (state) => {
+        state.loadMachineValuesStatus = "loading";
+      })
+      .addCase(loadMachineValuesAsync.fulfilled, (state, action) => {
+        state.loadMachineValuesStatus = "success";
+        state.machineValues = action.payload;
+      })
+      .addCase(loadMachineValuesAsync.rejected, (state) => {
+        state.loadMachineValuesStatus = "failed";
       }),
 });
+
+export const { resetMachineValues, setMachineValues } = machineSlice.actions;
 
 export const getMachineHealth = (state: RootState) =>
   state.machine.machineHealth;
 
+export const getMachineValues = (state: RootState) =>
+  state.machine.machineValues;
+
 export const getFetchMachineHealthStatus = (state: RootState) =>
   state.machine.fetchMachineHealthStatus;
+
+export const getLoadMachineValuesStatus = (state: RootState) =>
+  state.machine.loadMachineValuesStatus;
