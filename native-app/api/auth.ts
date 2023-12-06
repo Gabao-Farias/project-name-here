@@ -17,4 +17,19 @@ export class AuthAxios {
       throw error;
     }
   }
+
+  static async refresh(
+    props: AuthRefreshRequestBody
+  ): Promise<AuthRefreshResponseBody> {
+    try {
+      const { data } = await axiosInstance.post<AuthRefreshResponseBody>(
+        `${baseAuthURL}/token`,
+        props
+      );
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

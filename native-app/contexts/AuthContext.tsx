@@ -9,35 +9,57 @@ import { AuthAxios } from "../api";
 import { SecureStore } from "../services";
 
 type AuthData = {
-  user?: User;
+  userToken?: string;
+  refreshingToken: boolean;
   signIn: (props: AuthSignInRequestBody) => Promise<void>;
+  refreshToken: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthData>({} as AuthData);
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | undefined>();
+  const [userToken, setUserToken] = useState<string | undefined>();
+  const [refreshingToken, setRefreshingToken] = useState(false);
 
   const signIn = async (props: AuthSignInRequestBody) => {
-    const { email } = props;
     const { accessToken, refreshToken } = await AuthAxios.signIn(props);
 
     await SecureStore.setValue("ACCESS_TOKEN", accessToken);
     await SecureStore.setValue("REFRESH_TOKEN", refreshToken);
 
-    setUser({ email });
+    setUserToken(accessToken);
+  };
+
+  const refreshToken = async () => {
+    setRefreshingToken(true);
+
+    try {
+      const refreshToken = await SecureStore.getValue("REFRESH_TOKEN");
+
+      const { accessToken } = await AuthAxios.refresh({ refreshToken });
+
+      await SecureStore.setValue("ACCESS_TOKEN", accessToken);
+
+      setUserToken(accessToken);
+    } catch (error) {
+      setUserToken(undefined);
+    } finally {
+      setRefreshingToken(false);
+    }
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!userToken) {
       router.replace("/login");
     } else {
       router.replace("/");
     }
-  }, [user]);
+  }, [userToken]);
 
   return (
-    <AuthContext.Provider value={{ user, signIn }}>
+    <AuthContext.Provider
+      value={{ userToken, signIn, refreshToken, refreshingToken }}
+    >
       {children}
     </AuthContext.Provider>
   );
