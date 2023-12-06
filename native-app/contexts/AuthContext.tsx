@@ -1,4 +1,10 @@
-import React, { PropsWithChildren, createContext, useState } from "react";
+import { router } from "expo-router";
+import React, {
+  PropsWithChildren,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 import { AuthAxios } from "../api";
 import { SecureStore } from "../services";
 
@@ -21,6 +27,14 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     setUser({ email });
   };
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+    } else {
+      router.replace("/");
+    }
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ user, signIn }}>
