@@ -1,6 +1,6 @@
-import express, {Router} from 'express';
-import serverless from 'serverless-http';
-import {getMachineHealth} from '../../../machineHealth';
+import express, { Router } from "express";
+import serverless from "serverless-http";
+import { getMachineHealth } from "../../../src/functions/machineHealth";
 
 const api = express();
 
@@ -8,8 +8,8 @@ const api = express();
 api.use(express.json());
 
 const router = Router();
-router.get('/hello', (req, res) => res.send('Hello World!'));
-router.post('/machine-health', (req, res) => {
+router.get("/hello", (req, res) => res.send("Hello World!"));
+router.post("/machine-health", (req, res) => {
   const result = getMachineHealth(req);
   if (result.error) {
     res.status(400).json(result);
@@ -18,6 +18,6 @@ router.post('/machine-health', (req, res) => {
   }
 });
 
-api.use('/api/', router);
+api.use("/api/", router);
 
 export const handler = serverless(api);
