@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { MainProvider } from "../contexts";
+import { ReactotronService } from "../services";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -19,6 +20,7 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
+    ReactotronService.init();
     if (loaded) {
       SplashScreen.hideAsync();
     }
