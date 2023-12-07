@@ -41,8 +41,10 @@ declare type QualityControlStationPart = {
 };
 
 declare type MachineValues = {
-  weldingRobot: WeldingRobotParts;
-  paintingStation: PaintingStationParts;
-  assemblyLine: AssemblyLinePartParts;
-  qualityControlStation: QualityControlStationPart;
+  machines: {
+    weldingRobot?: WeldingRobotParts;
+    paintingStation?: PaintingStationParts;
+    assemblyLine?: AssemblyLinePartParts;
+    qualityControlStation?: QualityControlStationPart;
+  };
 };
