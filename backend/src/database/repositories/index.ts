@@ -4,6 +4,7 @@ import { AssemblyLines } from "../entities/assemblyLines.entity";
 import { MachineHealth } from "../entities/machineHealth.entity";
 import { MachineHistory } from "../entities/machineHistory.entity";
 import { MachineScore } from "../entities/machineScore.entity";
+import { MachineStateValues } from "../entities/machineStateValues.entity";
 import { PaintingStation } from "../entities/paitingStation.entity";
 import { QualityControlStation } from "../entities/qualityControlStation.entity";
 import { Welding } from "../entities/welding.entity";
@@ -22,3 +23,5 @@ export const qualityControlStationRepository = datasource.getRepository(
 
 export const machineHealthRepository = datasource.getRepository(MachineHealth);
 export const machineScoreRepository = datasource.getRepository(MachineScore);
+export const machineStateValuesRepository =
+  datasource.getRepository(MachineStateValues);
