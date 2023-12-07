@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -6,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { AssemblyLines } from "./assemblyLines.entity";
+import { MachineHealth } from "./machineHealth.entity";
 import { PaintingStation } from "./paitingStation.entity";
 import { QualityControlStation } from "./qualityControlStation.entity";
 import { User } from "./user.entity";
@@ -34,4 +36,13 @@ export class MachineHistory {
   @OneToOne(() => QualityControlStation, (qcs) => qcs.machine_history)
   @JoinColumn()
   quality_control: QualityControlStation;
+
+  @OneToOne(() => MachineHealth, (mh) => mh.machine_history, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn()
+  machine_health: MachineHealth;
+
+  @Column("timestamp with time zone")
+  created_at: Date;
 }
