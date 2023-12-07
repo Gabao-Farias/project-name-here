@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { Button, StyleSheet, TextInput } from "react-native";
 
-import { useMachineData } from "../app/useMachineData";
+import { DEFAULT_MACHINE_VALUES_OBJECT } from "../constants";
 import { MachineType } from "../data/types";
-import { useAppDispatch } from "../hooks";
-import { setMachineValues } from "../stores/slices";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { getMachineValues, setMachineValues } from "../stores/slices";
 import Picker from "./Picker";
 import { Text, View } from "./Themed";
 
@@ -13,7 +13,8 @@ export default function EditScreenInfo({ path }: { path: string }) {
   const [partName, setPartName] = useState("");
   const [partValue, setPartValue] = useState("");
   const [isSaved, setIsSaved] = useState(false);
-  const { machineData, updateMachineData } = useMachineData();
+
+  const machineValues = useAppSelector(getMachineValues);
 
   const dispatch = useAppDispatch();
 
@@ -81,17 +82,15 @@ export default function EditScreenInfo({ path }: { path: string }) {
 
   const savePart = useCallback(async () => {
     try {
-      const newMachineData = machineData
-        ? JSON.parse(JSON.stringify(machineData))
-        : { machines: {} }; // Deep copy machine parts
+      const newMachineData: MachineValues = machineValues
+        ? JSON.parse(JSON.stringify(machineValues))
+        : DEFAULT_MACHINE_VALUES_OBJECT; // Deep copy machine parts
 
       if (!newMachineData.machines[machineName]) {
         newMachineData.machines[machineName] = {};
       }
 
       newMachineData.machines[machineName][partName] = partValue;
-
-      await updateMachineData(newMachineData);
 
       dispatch(setMachineValues(newMachineData));
 
@@ -103,7 +102,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
       console.error(error);
       throw error; // Handle API errors appropriately
     }
-  }, [machineData, updateMachineData, machineName, partName, partValue]);
+  }, [machineName, partName, partValue]);
 
   return (
     <View>
