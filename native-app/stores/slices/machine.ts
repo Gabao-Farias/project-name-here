@@ -60,6 +60,8 @@ const setMachineValuesReducer = (
 
 const resetMachineValuesReducer = (state: MachineSliceState) => {
   state.machineValues = undefined;
+
+  AsyncStorage.setValue("MACHINE_VALUES", "");
 };
 
 export const machineSlice = createSlice({
