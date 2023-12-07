@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { getMachineHealth } from "../functions";
 import {
   getCompleteMachineHistory,
+  getMachineValues,
   storeMachineHistory,
   storeMachineStateValues,
 } from "../handlers";
@@ -34,6 +35,14 @@ machineRouter.get("/health", async (req: Request, res: Response) => {
   const history = await getCompleteMachineHistory(userId);
 
   res.json(history);
+});
+
+machineRouter.get("/values", async (req: Request, res: Response) => {
+  const userId = req.user?.user_id || "";
+
+  const machineValues = await getMachineValues(userId);
+
+  res.json(machineValues);
 });
 
 export { machineRouter };

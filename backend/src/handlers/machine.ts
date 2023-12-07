@@ -182,3 +182,19 @@ export const getCompleteMachineHistory = async (user_id: string) => {
 
   return history;
 };
+
+/**
+ * Gets the latest machine values from user calculation requests.
+ * @param user_id
+ * @returns
+ */
+export const getMachineValues = async (user_id: string) => {
+  const userFound = await userRepository.findOne({
+    where: { user_id },
+    relations: {
+      machine_state_values: true,
+    },
+  });
+
+  return userFound?.machine_state_values?.data;
+};
