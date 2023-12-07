@@ -129,3 +129,20 @@ export const storeMachineHistory = async (
 
   await machineHistoryRepository.insert(newMachineHistory);
 };
+
+export const getCompleteMachineHistory = async (user_id: string) => {
+  const history = await machineHistoryRepository.find({
+    where: { user_id },
+    relations: {
+      assembly_line: true,
+      machine_health: {
+        machine_score: true,
+      },
+      paiting_station: true,
+      quality_control: true,
+      welding: true,
+    },
+  });
+
+  return history;
+};

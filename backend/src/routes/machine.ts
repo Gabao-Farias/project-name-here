@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { getMachineHealth } from "../functions";
-import { storeMachineHistory } from "../handlers";
+import { getCompleteMachineHistory, storeMachineHistory } from "../handlers";
 import { authenticateToken } from "../middlewares";
 
 const machineRouter = Router();
@@ -20,6 +20,14 @@ machineRouter.post("/health", (req: Request, res: Response) => {
 
     res.json(result);
   }
+});
+
+machineRouter.get("/health", async (req: Request, res: Response) => {
+  const userId = req.user?.user_id || "";
+
+  const history = await getCompleteMachineHistory(userId);
+
+  res.json(history);
 });
 
 export { machineRouter };
