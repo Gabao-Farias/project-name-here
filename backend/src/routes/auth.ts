@@ -63,7 +63,7 @@ authRouter.post("/signin", async (req: Request, res: Response) => {
       return res.status(403).send("User name or password incorrect");
     }
 
-    const reqUser: Partial<JWTDefaultDecryptedValues> = {
+    const reqUser: JWTDefaultDecryptedValues = {
       user_id: userFound.user_id,
     };
 
@@ -108,7 +108,9 @@ authRouter.post("/token", async (req: Request, res: Response) => {
       return res.sendStatus(403);
     }
 
-    const accessToken = generateAccessToken({ name: user.name });
+    const typedUser: JWTDefaultDecryptedValues = user;
+
+    const accessToken = generateAccessToken({ user_id: typedUser.user_id });
 
     res.json({ accessToken });
   });
