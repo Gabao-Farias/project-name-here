@@ -37,6 +37,14 @@ machineRouter.get("/health", async (req: Request, res: Response) => {
   res.json(history);
 });
 
+machineRouter.post("/values", async (req: Request, res: Response) => {
+  const userId = req.user?.user_id || "";
+
+  storeMachineStateValues(userId, req.body);
+
+  return res.sendStatus(201);
+});
+
 machineRouter.get("/values", async (req: Request, res: Response) => {
   const userId = req.user?.user_id || "";
 
