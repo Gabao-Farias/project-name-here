@@ -24,7 +24,7 @@ const initialState: MachineSliceState = {
 };
 
 export const fetchMachineHealthAsync = createAsyncThunk(
-  "place/fetchMachineHealthAsync",
+  "machine/fetchMachineHealthAsync",
   async (props: MachineHealthRequestBody) => {
     const data = await MachineAxios.machineHealth(props);
 
@@ -33,7 +33,7 @@ export const fetchMachineHealthAsync = createAsyncThunk(
 );
 
 export const loadMachineValuesAsync = createAsyncThunk(
-  "place/loadMachineValuesAsync",
+  "machine/loadMachineValuesAsync",
   async () => {
     try {
       const unparsedJOSN = await AsyncStorage.getValue("MACHINE_VALUES");
