@@ -1,12 +1,13 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import { Button, StyleSheet, TextInput } from "react-native";
+import Loading from "../components/Loading";
 import { Text, View } from "../components/Themed";
 import { AuthContext } from "../contexts/AuthContext";
 
 type Props = {};
 
 const LoginScreen: FC<Props> = () => {
-  const { signIn, refreshToken, refreshingToken } = useContext(AuthContext);
+  const { signIn, refreshingToken } = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,14 +19,10 @@ const LoginScreen: FC<Props> = () => {
     });
   };
 
-  useEffect(() => {
-    refreshToken();
-  }, []);
-
   if (refreshingToken) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Loading...</Text>
+        <Loading />
       </View>
     );
   }

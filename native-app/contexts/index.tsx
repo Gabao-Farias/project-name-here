@@ -1,4 +1,6 @@
 import React from "react";
+import { Provider } from "react-redux";
+import { reduxStore } from "../stores";
 import { AuthProvider } from "./AuthContext";
 
 type MainProviderProps = {
@@ -6,5 +8,9 @@ type MainProviderProps = {
 };
 
 export const MainProvider: React.FC<MainProviderProps> = ({ children }) => {
-  return <AuthProvider>{children}</AuthProvider>;
+  return (
+    <Provider store={reduxStore}>
+      <AuthProvider>{children}</AuthProvider>
+    </Provider>
+  );
 };
