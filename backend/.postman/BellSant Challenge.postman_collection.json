@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"angiels\",\n  \"password\": \"312pass\"\n}",
+							"raw": "{\n  \"email\": \"batatao@gas.cs\",\n  \"password\": \"312pass\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -62,7 +62,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"angiels\",\n  \"password\": \"312pass\"\n}",
+							"raw": "{\n  \"email\": \"batatao@gas.cs\",\n  \"password\": \"312pass\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -83,7 +83,7 @@
 					"response": []
 				},
 				{
-					"name": "token",
+					"name": "refreshToken",
 					"event": [
 						{
 							"listen": "test",
@@ -141,6 +141,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -202,6 +212,127 @@
 							"path": [
 								"machine",
 								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "machineHealthHistory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/machine/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"machine",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "values",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/machine/values",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"machine",
+								"values"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health-values",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/machine/health-values",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"machine",
+								"health-values"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "values",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"machines\": {\n        \"paintingStation\": {\n            \"colorConsistency\": \"87.8\"\n        },\n        \"weldingRobot\": {\n            \"vibrationLevel\": \"0.7\",\n            \"shieldingPressure\": \"10.3\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/machine/values",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"machine",
+								"values"
 							]
 						}
 					},
