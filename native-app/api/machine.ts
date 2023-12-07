@@ -17,4 +17,28 @@ export class MachineAxios {
       throw error;
     }
   }
+
+  static async machineHealthState(): Promise<MachineHealthStateResponseBody> {
+    try {
+      const { data } = await axiosInstance.get<MachineHealthStateResponseBody>(
+        `${baseAuthURL}/health-values`
+      );
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async machineValuesState(): Promise<MachineValuesStateResponseBody> {
+    try {
+      const { data } = await axiosInstance.get<MachineValuesStateResponseBody>(
+        `${baseAuthURL}/values`
+      );
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

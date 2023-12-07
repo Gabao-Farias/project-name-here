@@ -42,11 +42,9 @@ export const loadMachineValuesAsync = createAsyncThunk(
   "machine/loadMachineValuesAsync",
   async () => {
     try {
-      const unparsedJOSN = await AsyncStorage.getValue("MACHINE_VALUES");
+      const machineValues = await MachineAxios.machineValuesState();
 
-      const data = JSON.parse(unparsedJOSN) as MachineValues;
-
-      return data;
+      return machineValues;
     } catch (error) {
       return undefined;
     }
@@ -57,11 +55,9 @@ export const loadMachineHealthAsync = createAsyncThunk(
   "machine/loadMachineHealthAsync",
   async () => {
     try {
-      const unparsedJOSN = await AsyncStorage.getValue("MACHINE_HEALTH");
+      const machineValues = await MachineAxios.machineHealthState();
 
-      const data = JSON.parse(unparsedJOSN) as MachineHealthResponseBody;
-
-      return data;
+      return machineValues;
     } catch (error) {
       return undefined;
     }
