@@ -2,6 +2,7 @@ import {
   User,
   assemblyLinesRepository,
   machineHealthRepository,
+  machineHealthStateValuesRepository,
   machineHistoryRepository,
   machineScoreRepository,
   machineStateValuesRepository,
@@ -12,6 +13,7 @@ import {
 } from "../database";
 import { AssemblyLines } from "../database/entities/assemblyLines.entity";
 import { MachineHealth } from "../database/entities/machineHealth.entity";
+import { MachineHealthStateValues } from "../database/entities/machineHealthStateValues.entity";
 import { MachineHistory } from "../database/entities/machineHistory.entity";
 import { MachineScore } from "../database/entities/machineScore.entity";
 import { MachineStateValues } from "../database/entities/machineStateValues.entity";
@@ -46,6 +48,38 @@ export const storeMachineStateValues = async (
   const updatedUser: User = {
     ...userFound,
     machine_state_values: newMachineStateValues,
+  };
+
+  await userRepository.update({ user_id }, { ...updatedUser });
+};
+
+export const storeMachineHealthStateValues = async (
+  user_id: string,
+  machineHealth: MachineHealthType
+) => {
+  const userFound = await userRepository.findOne({
+    where: { user_id },
+    relations: {
+      machine_health_state_values: true,
+    },
+  });
+
+  if (!userFound) {
+    throw new Error();
+  }
+
+  const newMachineHealthStateValues = new MachineHealthStateValues();
+  newMachineHealthStateValues.id = user_id;
+  newMachineHealthStateValues.data = machineHealth;
+  newMachineHealthStateValues.updated_at = new Date();
+
+  await machineHealthStateValuesRepository.upsert(newMachineHealthStateValues, [
+    "id" as keyof MachineHealthStateValues,
+  ]);
+
+  const updatedUser: User = {
+    ...userFound,
+    machine_health_state_values: newMachineHealthStateValues,
   };
 
   await userRepository.update({ user_id }, { ...updatedUser });
@@ -197,4 +231,20 @@ export const getMachineValues = async (user_id: string) => {
   });
 
   return userFound?.machine_state_values?.data;
+};
+
+/**
+ * Gets the latest machine health values from user calculation requests.
+ * @param user_id
+ * @returns
+ */
+export const getMachineHealthValues = async (user_id: string) => {
+  const userFound = await userRepository.findOne({
+    where: { user_id },
+    relations: {
+      machine_health_state_values: true,
+    },
+  });
+
+  return userFound?.machine_health_state_values?.data;
 };
