@@ -11,6 +11,8 @@ export interface MachineSliceState {
   fetchMachineHealthStatus: AsyncCallStatus;
 
   loadMachineValuesStatus: AsyncCallStatus;
+
+  loadMachineHealthStatus: AsyncCallStatus;
 }
 
 const initialState: MachineSliceState = {
@@ -21,12 +23,16 @@ const initialState: MachineSliceState = {
   fetchMachineHealthStatus: "idle",
 
   loadMachineValuesStatus: "idle",
+
+  loadMachineHealthStatus: "idle",
 };
 
 export const fetchMachineHealthAsync = createAsyncThunk(
   "machine/fetchMachineHealthAsync",
   async (props: MachineHealthRequestBody) => {
     const data = await MachineAxios.machineHealth(props);
+
+    AsyncStorage.setValue("MACHINE_HEALTH", JSON.stringify(data));
 
     return data;
   }
@@ -39,6 +45,21 @@ export const loadMachineValuesAsync = createAsyncThunk(
       const unparsedJOSN = await AsyncStorage.getValue("MACHINE_VALUES");
 
       const data = JSON.parse(unparsedJOSN) as MachineValues;
+
+      return data;
+    } catch (error) {
+      return undefined;
+    }
+  }
+);
+
+export const loadMachineHealthAsync = createAsyncThunk(
+  "machine/loadMachineHealthAsync",
+  async () => {
+    try {
+      const unparsedJOSN = await AsyncStorage.getValue("MACHINE_HEALTH");
+
+      const data = JSON.parse(unparsedJOSN) as MachineHealthResponseBody;
 
       return data;
     } catch (error) {
@@ -91,6 +112,16 @@ export const machineSlice = createSlice({
         state.machineValues = action.payload;
       })
       .addCase(loadMachineValuesAsync.rejected, (state) => {
+        state.loadMachineValuesStatus = "failed";
+      })
+      .addCase(loadMachineHealthAsync.pending, (state) => {
+        state.loadMachineValuesStatus = "loading";
+      })
+      .addCase(loadMachineHealthAsync.fulfilled, (state, action) => {
+        state.loadMachineValuesStatus = "success";
+        state.machineHealth = action.payload;
+      })
+      .addCase(loadMachineHealthAsync.rejected, (state) => {
         state.loadMachineValuesStatus = "failed";
       }),
 });

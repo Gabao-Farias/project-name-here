@@ -1,6 +1,6 @@
 import * as AsyncStorageBase from "@react-native-async-storage/async-storage";
 
-export type AsyncStorageKeys = "MACHINE_VALUES";
+export type AsyncStorageKeys = "MACHINE_VALUES" | "MACHINE_HEALTH";
 
 export class AsyncStorage {
   static async setValue(key: AsyncStorageKeys, value: string) {
