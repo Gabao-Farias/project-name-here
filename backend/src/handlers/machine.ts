@@ -1,19 +1,55 @@
 import {
+  User,
   assemblyLinesRepository,
   machineHealthRepository,
   machineHistoryRepository,
   machineScoreRepository,
+  machineStateValuesRepository,
   paitingStationRepository,
   qualityControlStationRepository,
+  userRepository,
   weldingRepository,
 } from "../database";
 import { AssemblyLines } from "../database/entities/assemblyLines.entity";
 import { MachineHealth } from "../database/entities/machineHealth.entity";
 import { MachineHistory } from "../database/entities/machineHistory.entity";
 import { MachineScore } from "../database/entities/machineScore.entity";
+import { MachineStateValues } from "../database/entities/machineStateValues.entity";
 import { PaintingStation } from "../database/entities/paitingStation.entity";
 import { QualityControlStation } from "../database/entities/qualityControlStation.entity";
 import { Welding } from "../database/entities/welding.entity";
+
+export const storeMachineStateValues = async (
+  user_id: string,
+  machineValues: MachineValues
+) => {
+  const userFound = await userRepository.findOne({
+    where: { user_id },
+    relations: {
+      machine_state_values: true,
+    },
+  });
+
+  if (!userFound) {
+    throw new Error();
+  }
+
+  const newMachineStateValues = new MachineStateValues();
+  newMachineStateValues.id = user_id;
+  newMachineStateValues.data = machineValues;
+  newMachineStateValues.updated_at = new Date();
+
+  await machineStateValuesRepository.upsert(newMachineStateValues, [
+    "id" as keyof MachineStateValues,
+  ]);
+
+  const updatedUser: User = {
+    ...userFound,
+    machine_state_values: newMachineStateValues,
+  };
+
+  await userRepository.update({ user_id }, { ...updatedUser });
+};
 
 export const storeMachineHistory = async (
   user_id: string,

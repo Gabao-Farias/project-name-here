@@ -1,6 +1,10 @@
 import { Request, Response, Router } from "express";
 import { getMachineHealth } from "../functions";
-import { getCompleteMachineHistory, storeMachineHistory } from "../handlers";
+import {
+  getCompleteMachineHistory,
+  storeMachineHistory,
+  storeMachineStateValues,
+} from "../handlers";
 import { authenticateToken } from "../middlewares";
 
 const machineRouter = Router();
@@ -16,6 +20,8 @@ machineRouter.post("/health", (req: Request, res: Response) => {
   if (result.error) {
     res.status(400).json(result);
   } else {
+    storeMachineStateValues(userId, req.body);
+
     storeMachineHistory(userId, req.body, result);
 
     res.json(result);
