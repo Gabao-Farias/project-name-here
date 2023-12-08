@@ -135,3 +135,6 @@ export const getFetchMachineHealthStatus = (state: RootState) =>
 
 export const getLoadMachineValuesStatus = (state: RootState) =>
   state.machine.loadMachineValuesStatus;
+
+export const getLoadMachineHealthValuesStatus = (state: RootState) =>
+  state.machine.loadMachineHealthStatus;

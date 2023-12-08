@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   fetchMachineHealthAsync,
   getFetchMachineHealthStatus,
+  getLoadMachineHealthValuesStatus,
+  getLoadMachineValuesStatus,
   getMachineHealth,
   getMachineValues,
   resetMachineValues,
@@ -12,6 +14,11 @@ import {
 export default function StateScreen() {
   const machineHealth = useAppSelector(getMachineHealth);
   const fetchMachineHealthStatus = useAppSelector(getFetchMachineHealthStatus);
+
+  const loadMachineHealthValueStatus = useAppSelector(
+    getLoadMachineHealthValuesStatus
+  );
+  const loadMachineValuesStatus = useAppSelector(getLoadMachineValuesStatus);
 
   const machineValues = useAppSelector(getMachineValues);
 
@@ -36,7 +43,10 @@ export default function StateScreen() {
     }
   }, [machineValues]);
 
-  const isLoading = fetchMachineHealthStatus === "loading";
+  const isLoading =
+    fetchMachineHealthStatus === "loading" ||
+    loadMachineHealthValueStatus === "loading" ||
+    loadMachineValuesStatus === "loading";
 
   return (
     <MachineState
