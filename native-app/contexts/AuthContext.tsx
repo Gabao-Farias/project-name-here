@@ -6,12 +6,14 @@ import React, {
   useState,
 } from "react";
 import { AuthAxios } from "../api";
+import { UnauthorizedObservable } from "../observables";
 import { SecureStore } from "../services";
 
 type AuthData = {
   userToken?: string;
   refreshingToken: boolean;
   signIn: (props: AuthSignInRequestBody) => Promise<void>;
+  signOut: () => Promise<void>;
   refreshToken: () => Promise<void>;
 };
 
@@ -20,6 +22,17 @@ export const AuthContext = createContext<AuthData>({} as AuthData);
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [userToken, setUserToken] = useState<string | undefined>();
   const [refreshingToken, setRefreshingToken] = useState(false);
+
+  const signOut = async () => {
+    const refreshToken = await SecureStore.getValue("REFRESH_TOKEN");
+
+    await AuthAxios.signout({ refreshToken });
+
+    SecureStore.setValue("ACCESS_TOKEN", "");
+    SecureStore.setValue("REFRESH_TOKEN", "");
+
+    setUserToken(undefined);
+  };
 
   const signIn = async (props: AuthSignInRequestBody) => {
     const { accessToken, refreshToken } = await AuthAxios.signIn(props);
@@ -56,9 +69,17 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }, [userToken]);
 
+  useEffect(() => {
+    UnauthorizedObservable.subscribe(signOut);
+
+    return () => {
+      UnauthorizedObservable.unsubscribe(signOut);
+    };
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ userToken, signIn, refreshToken, refreshingToken }}
+      value={{ userToken, signIn, refreshToken, refreshingToken, signOut }}
     >
       {children}
     </AuthContext.Provider>
