@@ -3,6 +3,14 @@ import { axiosInstance } from "./request";
 const baseAuthURL = "/auth";
 
 export class AuthAxios {
+  static async signUp(props: AuthSignUpRequestBody): Promise<void> {
+    try {
+      await axiosInstance.post(`${baseAuthURL}/signup`, props);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async signIn(
     props: AuthSignInRequestBody
   ): Promise<AuthSignInResponseBody> {

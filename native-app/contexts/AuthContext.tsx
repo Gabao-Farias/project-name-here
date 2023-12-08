@@ -12,6 +12,7 @@ import { SecureStore } from "../services";
 type AuthData = {
   userToken?: string;
   refreshingToken: boolean;
+  signUp: (props: AuthSignUpRequestBody) => Promise<void>;
   signIn: (props: AuthSignInRequestBody) => Promise<void>;
   signOut: () => Promise<void>;
   refreshToken: () => Promise<void>;
@@ -41,6 +42,10 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     await SecureStore.setValue("REFRESH_TOKEN", refreshToken);
 
     setUserToken(accessToken);
+  };
+
+  const signUp = async (props: AuthSignUpRequestBody) => {
+    await AuthAxios.signUp(props);
   };
 
   const refreshToken = async () => {
@@ -79,7 +84,14 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ userToken, signIn, refreshToken, refreshingToken, signOut }}
+      value={{
+        userToken,
+        signIn,
+        refreshToken,
+        refreshingToken,
+        signOut,
+        signUp,
+      }}
     >
       {children}
     </AuthContext.Provider>

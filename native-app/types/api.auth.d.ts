@@ -3,6 +3,11 @@ declare type AuthSignInRequestBody = {
   password: string;
 };
 
+declare type AuthSignUpRequestBody = {
+  email: string;
+  password: string;
+};
+
 declare type AuthSignOutRequestBody = {
   refreshToken: string;
 };
