@@ -9,6 +9,7 @@ import {
   colorSecondary,
   colorText,
 } from "../../constants/Colors";
+import { DEFAULT_APP_CONTENT_PADDING } from "../../constants/styles";
 import { useAppSelector } from "../../hooks";
 import {
   getFetchMachineHistoryStatus,
@@ -56,7 +57,9 @@ export default function ChartTab() {
                 },
               ],
             }}
-            width={Dimensions.get("window").width * 0.9} // from react-native
+            width={
+              Dimensions.get("window").width - 2 * DEFAULT_APP_CONTENT_PADDING
+            } // from react-native
             height={320}
             yAxisInterval={1} // optional, defaults to 1
             withShadow
@@ -97,7 +100,7 @@ export default function ChartTab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    paddingHorizontal: DEFAULT_APP_CONTENT_PADDING,
   },
   title: {
     fontSize: 20,

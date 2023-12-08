@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { StyleSheet, TextInput } from "react-native";
 
 import { DEFAULT_MACHINE_VALUES_OBJECT } from "../constants";
+import { DEFAULT_APP_CONTENT_PADDING } from "../constants/styles";
 import { MachineType } from "../data/types";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getMachineValues, setMachineValues } from "../stores/slices";
@@ -107,7 +108,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentWrapper}>
+      <View>
         <Text style={styles.label}>Machine Name</Text>
         <Picker
           value={machineName}
@@ -166,9 +167,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  contentWrapper: {
-    padding: 8,
+    paddingHorizontal: DEFAULT_APP_CONTENT_PADDING,
   },
   label: {
     fontSize: 18,
@@ -190,7 +189,6 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     flex: 1,
     justifyContent: "flex-end",
-    width: "100%",
-    padding: 8,
+    paddingBottom: 8,
   },
 });
