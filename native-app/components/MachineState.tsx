@@ -1,9 +1,11 @@
 import { Link } from "expo-router";
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Loading from "../components/Loading";
 import { MachineScore } from "../components/MachineScore";
 import { PartsOfMachine } from "../components/PartsOfMachine";
 import { Text, View } from "../components/Themed";
+import { colorSecondary, colorText } from "../constants/Colors";
+import Button from "./Button";
 
 type Props = {
   machineValues?: MachineValues;
@@ -83,13 +85,12 @@ const MachineState: React.FC<Props> = (props: Props) => {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <Button title="Calculate Health" onPress={calculateHealth} />
-      <View style={styles.resetButton}>
-        <Button
-          title="Reset Machine Data"
-          onPress={resetMachineValues}
-          color="#FF0000"
-        />
+
+      <View style={styles.buttonWrapper}>
+        <Button onPress={calculateHealth}>Calculate Health</Button>
+        <Button onPress={resetMachineValues} variant="secondary">
+          Reset Machine Data
+        </Button>
       </View>
     </View>
   );
@@ -103,26 +104,36 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    color: colorText,
   },
   title2: {
     fontSize: 17,
     fontWeight: "bold",
+    color: colorText,
   },
   separator: {
     marginVertical: 20,
     height: 1,
     width: "80%",
   },
-  text: {},
+  text: {
+    color: colorText,
+  },
   link: {
     paddingBottom: 15,
   },
   linkText: {
     fontSize: 14,
-    color: "#2e78b7",
+    color: colorSecondary,
   },
   resetButton: {
     marginTop: 10,
+  },
+  buttonWrapper: {
+    flex: 1,
+    justifyContent: "flex-end",
+    width: "100%",
+    padding: 8,
   },
 });
 

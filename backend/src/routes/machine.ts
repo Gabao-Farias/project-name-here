@@ -15,7 +15,7 @@ const machineRouter = Router();
 machineRouter.use(authenticateToken);
 
 // Endpoint to get machine health score
-machineRouter.post("/health", (req: Request, res: Response) => {
+machineRouter.post("/health", async (req: Request, res: Response) => {
   const userId = req.user?.user_id || "";
 
   const result = getMachineHealth(req);
@@ -27,7 +27,7 @@ machineRouter.post("/health", (req: Request, res: Response) => {
 
     storeMachineHealthStateValues(userId, result);
 
-    storeMachineHistory(userId, req.body, result);
+    await storeMachineHistory(userId, req.body, result);
 
     res.json(result);
   }

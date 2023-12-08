@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
+import { colorText } from "../constants/Colors";
 import { Text } from "./Themed";
 
 export const PartsOfMachine = ({
@@ -30,5 +31,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    color: colorText,
   },
 });

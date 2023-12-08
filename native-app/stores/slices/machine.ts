@@ -8,6 +8,10 @@ export interface MachineSliceState {
 
   machineValues?: MachineValues;
 
+  machineHistory?: MachineHealthHistoryResponseBody;
+
+  fetchMachineHistoryStatus: AsyncCallStatus;
+
   fetchMachineHealthStatus: AsyncCallStatus;
 
   loadMachineValuesStatus: AsyncCallStatus;
@@ -20,12 +24,25 @@ const initialState: MachineSliceState = {
 
   machineValues: undefined,
 
+  machineHistory: [],
+
+  fetchMachineHistoryStatus: "idle",
+
   fetchMachineHealthStatus: "idle",
 
   loadMachineValuesStatus: "idle",
 
   loadMachineHealthStatus: "idle",
 };
+
+export const fetchMachineHistoryAsync = createAsyncThunk(
+  "machine/fetchMachineHistoryAsync",
+  async () => {
+    const data = await MachineAxios.machineHealthHistory();
+
+    return data;
+  }
+);
 
 export const fetchMachineHealthAsync = createAsyncThunk(
   "machine/fetchMachineHealthAsync",
@@ -119,6 +136,16 @@ export const machineSlice = createSlice({
       })
       .addCase(loadMachineHealthAsync.rejected, (state) => {
         state.loadMachineValuesStatus = "failed";
+      })
+      .addCase(fetchMachineHistoryAsync.pending, (state) => {
+        state.fetchMachineHistoryStatus = "loading";
+      })
+      .addCase(fetchMachineHistoryAsync.fulfilled, (state, action) => {
+        state.fetchMachineHistoryStatus = "success";
+        state.machineHistory = action.payload;
+      })
+      .addCase(fetchMachineHistoryAsync.rejected, (state) => {
+        state.fetchMachineHistoryStatus = "failed";
       }),
 });
 
@@ -129,6 +156,12 @@ export const getMachineHealth = (state: RootState) =>
 
 export const getMachineValues = (state: RootState) =>
   state.machine.machineValues;
+
+export const getMachineHistory = (state: RootState) =>
+  state.machine.machineHistory;
+
+export const getFetchMachineHistoryStatus = (state: RootState) =>
+  state.machine.fetchMachineHistoryStatus;
 
 export const getFetchMachineHealthStatus = (state: RootState) =>
   state.machine.fetchMachineHealthStatus;

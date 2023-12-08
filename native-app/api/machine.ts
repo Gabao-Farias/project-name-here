@@ -18,6 +18,19 @@ export class MachineAxios {
     }
   }
 
+  static async machineHealthHistory(): Promise<MachineHealthHistoryResponseBody> {
+    try {
+      const { data } =
+        await axiosInstance.get<MachineHealthHistoryResponseBody>(
+          `${baseAuthURL}/health`
+        );
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async machineHealthState(): Promise<MachineHealthStateResponseBody> {
     try {
       const { data } = await axiosInstance.get<MachineHealthStateResponseBody>(
