@@ -1,7 +1,6 @@
 import { Dimensions, StyleSheet, Text } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 
-import reactotron from "reactotron-react-native";
 import Loading from "../../components/Loading";
 import { View } from "../../components/Themed";
 import {
@@ -30,10 +29,6 @@ export default function ChartTab() {
     .map(({ machine_health }) => machine_health.factory)
     .slice(0)
     .slice(-5);
-
-  if (reactotron.log) {
-    reactotron.log(factoryScore);
-  }
 
   const isLoading = fetchMachineHistoryStatus === "loading";
 
