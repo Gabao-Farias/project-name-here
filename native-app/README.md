@@ -34,6 +34,20 @@ Main library to make HTTP requests, there are also two very useful feature that 
 
 Great tool to inspect all the requests coming from the app. Easy to install, easy to use and provides essential information about the requests.
 
+## Future improvements
+
+### Routing
+
+I still don't have much ground with expo based apps, I feel safer dealing with bare React Native projects which I know that there are less things under the hood that I should be aware of (like routing). I had some issues on the beggining of development with routing on expo that probably I wouldn't have on CRNA based apps.
+
+### Design System
+
+In this project the styles could be largely improved by providing a design system, personally I use styled-components for that, all components would be linked to theme variables, later on if the theme changes, no component would need to be updated, it would be just a matter of changing the variables values and the app would react accordingly.
+
+### Tests
+
+Tests are expensive, but as the apps starts growing, we will also start to understand their importance... This was out of my focus, and I would be using vitest by it's great performance and good integration with Typescript and detox for e2e tests.
+
 ######################################################################
 
 # Machine Health App (React Native Expo)
