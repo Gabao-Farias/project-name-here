@@ -1,3 +1,17 @@
+# Get started
+
+## Demonstrations
+
+I made some videos explaining some ideias about the application, you can find those [here](https://drive.google.com/drive/folders/1Fbk4H7Qvhu25A3GtVYqDDNv8WuuAJ8Mc?usp=sharing)
+
+## App
+
+All the mobile app related docs you can check [here](./native-app/README.md)
+
+## Backend
+
+All the backend related docs you can check [here](./backend/README.md)
+
 # Factory Health Monitor - Authentication, State Management, and Persistence
 
 ## Overview
