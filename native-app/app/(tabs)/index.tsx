@@ -3,6 +3,7 @@ import MachineState from "../../components/MachineState";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   fetchMachineHealthAsync,
+  fetchMachineHistoryAsync,
   getFetchMachineHealthStatus,
   getLoadMachineHealthValuesStatus,
   getLoadMachineValuesStatus,
@@ -31,6 +32,7 @@ export default function StateScreen() {
   const calculateHealth = useCallback(async () => {
     try {
       await dispatch(fetchMachineHealthAsync(machineValues));
+      dispatch(fetchMachineHistoryAsync());
     } catch (error) {
       console.error(error);
       console.log(
