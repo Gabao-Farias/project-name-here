@@ -9,16 +9,16 @@ export default {
   light: {
     text: "#000",
     background: "#fff",
-    tint: tintColorLight,
+    tint: colorPrimary,
     tabIconDefault: "#ccc",
-    tabIconSelected: tintColorLight,
+    tabIconSelected: colorPrimary,
   },
   dark: {
     text: "#000",
     background: "#fff",
-    tint: tintColorLight,
+    tint: colorPrimary,
     tabIconDefault: "#ccc",
-    tabIconSelected: tintColorLight,
+    tabIconSelected: colorPrimary,
   },
   darkLegacy: {
     text: "#fff",
