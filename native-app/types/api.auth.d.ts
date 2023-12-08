@@ -3,6 +3,10 @@ declare type AuthSignInRequestBody = {
   password: string;
 };
 
+declare type AuthSignOutRequestBody = {
+  refreshToken: string;
+};
+
 declare type AuthSignInResponseBody = {
   accessToken: string;
   refreshToken: string;

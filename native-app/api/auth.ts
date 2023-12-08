@@ -32,4 +32,21 @@ export class AuthAxios {
       throw error;
     }
   }
+
+  static async signout(
+    props: AuthSignOutRequestBody
+  ): Promise<AuthSignInResponseBody> {
+    try {
+      const { data } = await axiosInstance.delete<AuthSignInResponseBody>(
+        `${baseAuthURL}/signout`,
+        {
+          data: props,
+        }
+      );
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

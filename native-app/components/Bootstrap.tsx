@@ -8,13 +8,24 @@ import {
 
 export const Bootstrap = () => {
   const dispatch = useAppDispatch();
-  const { refreshToken } = useContext(AuthContext);
+  const { refreshToken, userToken } = useContext(AuthContext);
 
   useEffect(() => {
-    dispatch(loadMachineValuesAsync());
-    dispatch(loadMachineHealthAsync());
-    refreshToken();
-  }, []);
+    const loggedOutBootstrap = () => {
+      refreshToken();
+    };
+
+    const loggedInBootstrap = () => {
+      dispatch(loadMachineValuesAsync());
+      dispatch(loadMachineHealthAsync());
+    };
+
+    if (!userToken) {
+      loggedOutBootstrap();
+    } else {
+      loggedInBootstrap();
+    }
+  }, [userToken]);
 
   return null;
 };
