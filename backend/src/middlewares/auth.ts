@@ -9,8 +9,8 @@ export const authenticateToken = (
   const authHeader = req.headers.authorization;
   const token = (authHeader && authHeader?.split(" ")[1]) || "";
 
-  if (token === undefined) {
-    return res.sendStatus(401);
+  if (!token) {
+    return res.sendStatus(400);
   }
 
   const jwtSecret = process.env.ACCESS_TOKEN_SECRET || "";
