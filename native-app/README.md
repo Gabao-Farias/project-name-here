@@ -1,3 +1,41 @@
+# Get started
+
+## Server
+
+1. Install the dependencies
+
+```
+yarn
+```
+
+2. Start expo the server
+
+```
+yarn start
+```
+
+# About the app
+
+## Techs and tools
+
+### Expo Secure Store
+
+Similar to Async Storage, provides a way to persist sensible content locally in the device which can be accessed later by the app. In this app, this was used to store credentials.
+
+### Redux
+
+This is the main tool for app's state management. Although it's boilerplate can look big, after it's all setup it gets easy to scale the app state data. Also MobX could be useful for this project, but has less tooling than the first one, so when using it, you must be aware that you may need to build behaviors and patterns on your own.
+
+### Axios
+
+Main library to make HTTP requests, there are also two very useful feature that are interceptors for both requests and responses. Those for example were used to provide the token for signed in users, and also, handle logout on app which is handled by an observer as seen on repo.
+
+### Reactotron
+
+Great tool to inspect all the requests coming from the app. Easy to install, easy to use and provides essential information about the requests.
+
+######################################################################
+
 # Machine Health App (React Native Expo)
 
 Welcome to the Machine Health App, a React Native Expo project designed to evaluate the health of various machines in an automobile factory. This README will guide you on setting up and running the app, as well as understanding its structure.
