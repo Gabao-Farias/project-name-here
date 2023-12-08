@@ -1,1 +1,1 @@
-export const DEFAULT_ACCESS_TOKEN_EXPIRES_IN = "24h";
+export const DEFAULT_ACCESS_TOKEN_EXPIRES_IN = "1h";

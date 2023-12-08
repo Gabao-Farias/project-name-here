@@ -7,7 +7,6 @@ import {
   refreshTokenRepository,
   userRepository,
 } from "../database";
-import { authenticateToken } from "../middlewares";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -116,28 +115,24 @@ authRouter.post("/token", async (req: Request, res: Response) => {
   });
 });
 
-authRouter.delete(
-  "/signout",
-  authenticateToken,
-  async (req: Request, res: Response) => {
-    const requestedUserId = req.user?.user_id;
+authRouter.delete("/signout", async (req: Request, res: Response) => {
+  const requestedUserId = req.user?.user_id;
 
-    const refreshTokenFound = await refreshTokenRepository.findOne({
-      where: {
-        user_id: requestedUserId,
-      },
-    });
-
-    if (!refreshTokenFound) {
-      return res.sendStatus(403);
-    }
-
-    await refreshTokenRepository.delete({
+  const refreshTokenFound = await refreshTokenRepository.findOne({
+    where: {
       user_id: requestedUserId,
-    });
+    },
+  });
 
-    return res.sendStatus(204);
+  if (!refreshTokenFound) {
+    return res.sendStatus(403);
   }
-);
+
+  await refreshTokenRepository.delete({
+    user_id: requestedUserId,
+  });
+
+  return res.sendStatus(204);
+});
 
 export { authRouter };
