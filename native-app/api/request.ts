@@ -1,5 +1,7 @@
 import axios from "axios";
 import { Platform } from "react-native";
+import { UNAUTHORIZED_STATUS_CODE } from "../constants";
+import { UnauthorizedObservable } from "../observables";
 import { SecureStore } from "../services";
 
 const isAndroid = Platform.OS === "android";
@@ -23,6 +25,17 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   async (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosInstance.interceptors.response.use(
+  (config) => config,
+  (error) => {
+    if (error.response.status === UNAUTHORIZED_STATUS_CODE) {
+      UnauthorizedObservable.notify();
+    }
+
     return Promise.reject(error);
   }
 );
