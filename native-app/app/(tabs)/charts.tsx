@@ -9,7 +9,6 @@ import {
   colorSecondary,
   colorText,
 } from "../../constants/Colors";
-import { DEFAULT_APP_CONTENT_PADDING } from "../../constants/styles";
 import { useAppSelector } from "../../hooks";
 import {
   getFetchMachineHistoryStatus,
@@ -24,12 +23,12 @@ export default function ChartTab() {
 
   const labels = machineHistory
     .map(({ created_at }) => new Date(created_at).toLocaleTimeString())
-    .slice(1)
+    .slice(0)
     .slice(-5);
 
   const factoryScore = machineHistory
     .map(({ machine_health }) => machine_health.factory)
-    .slice(1)
+    .slice(0)
     .slice(-5);
 
   if (reactotron.log) {
@@ -57,9 +56,7 @@ export default function ChartTab() {
                 },
               ],
             }}
-            width={
-              Dimensions.get("window").width - 2 * DEFAULT_APP_CONTENT_PADDING
-            } // from react-native
+            width={Dimensions.get("window").width * 0.9} // from react-native
             height={320}
             yAxisInterval={1} // optional, defaults to 1
             withShadow
@@ -100,7 +97,7 @@ export default function ChartTab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: DEFAULT_APP_CONTENT_PADDING,
+    alignItems: "center",
   },
   title: {
     fontSize: 20,
