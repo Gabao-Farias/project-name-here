@@ -48,6 +48,24 @@ The same applyes to TypeORM, I'm more used to use the repository approach to dea
 
 Tool used to debug and make http calls against the server, also the files that I used you can find [here](./.postman)
 
+## Future improvements
+
+### Containerization
+
+It's a lot of effort to configure and run locally directly on host machine a Postgres database, containerization could not only reduce a lot of this initial effort, but also make it more flexible to database changes.
+
+### Data validators
+
+In frameworks like NestJS they recommend to use tools like [class-validator](https://github.com/typestack/class-validator) for data validation. Those validators are massively useful, mainly to use on middlewares to check wether the data sent on request is structurally correct. In this project I would use the zod which has some great features like automatic typing for objects.
+
+### Tests
+
+This topic was totally out of my focus, but I do understand that for large applications tests are crucial and expensive though. In this project I would be using vitest that has great performance and better integration with Typescript.
+
+### Pipelines for CI/CD
+
+Further on development, pipelines would be largely used not only for deployments but also for code checking. This topic was also out of focus.
+
 ######################################################################
 
 # BellSant Machine Health API
