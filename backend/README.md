@@ -20,7 +20,13 @@ yarn migrations:run
 
 1. Setup the .env file (you can use .env.example as an example)
 
-2. Start the server
+2. Install dependencies
+
+```
+yarn
+```
+
+3. Start the server
 
 ```
 yarn start
