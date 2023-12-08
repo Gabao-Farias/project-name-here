@@ -18,7 +18,7 @@ yarn migrations:run
 
 ## Server
 
-1. Setup the .env file (you can use .env.example as an example)
+1. Setup the .env file (I was using `.env` as file name)
 
 2. Install dependencies
 

@@ -2,13 +2,15 @@
 
 ## Server
 
-1. Install the dependencies
+1. Setup the .env file (I was using `.env.local`)
+
+2. Install the dependencies
 
 ```
 yarn
 ```
 
-2. Start expo the server
+3. Start expo the server
 
 ```
 yarn start
