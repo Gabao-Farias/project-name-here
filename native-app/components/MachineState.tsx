@@ -5,6 +5,7 @@ import { MachineScore } from "../components/MachineScore";
 import { PartsOfMachine } from "../components/PartsOfMachine";
 import { Text, View } from "../components/Themed";
 import { colorSecondary, colorText } from "../constants/Colors";
+import { DEFAULT_APP_CONTENT_PADDING } from "../constants/styles";
 import Button from "./Button";
 
 type Props = {
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    paddingHorizontal: DEFAULT_APP_CONTENT_PADDING,
   },
   title: {
     fontSize: 20,
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     width: "100%",
-    padding: 8,
+    paddingBottom: 8,
   },
 });
 
