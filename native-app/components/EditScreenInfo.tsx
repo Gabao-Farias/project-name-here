@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from "react";
-import { Button, StyleSheet, TextInput } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 
 import { DEFAULT_MACHINE_VALUES_OBJECT } from "../constants";
 import { MachineType } from "../data/types";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getMachineValues, setMachineValues } from "../stores/slices";
+import Button from "./Button";
 import Picker from "./Picker";
 import { Text, View } from "./Themed";
 
@@ -105,28 +106,32 @@ export default function EditScreenInfo({ path }: { path: string }) {
   }, [machineName, partName, partValue]);
 
   return (
-    <View>
-      <Text style={styles.label}>Machine Name</Text>
-      <Picker
-        value={machineName}
-        onSetValue={setMachineName}
-        items={machineNames}
-      />
+    <View style={styles.container}>
+      <View style={styles.contentWrapper}>
+        <Text style={styles.label}>Machine Name</Text>
+        <Picker
+          value={machineName}
+          onSetValue={setMachineName}
+          items={machineNames}
+        />
 
-      <Text style={styles.label}>Part Name</Text>
-      <Picker value={partName} onSetValue={setPartName} items={partNames} />
+        <Text style={styles.label}>Part Name</Text>
+        <Picker value={partName} onSetValue={setPartName} items={partNames} />
 
-      <Text style={styles.label}>Part Value</Text>
-      <TextInput
-        style={styles.input}
-        value={partValue}
-        onChangeText={(text) => setPartValue(text)}
-        placeholder="Enter part value"
-      />
+        <Text style={styles.label}>Part Value</Text>
+        <TextInput
+          style={styles.input}
+          value={partValue}
+          onChangeText={(text) => setPartValue(text)}
+          placeholder="Enter part value"
+        />
 
-      <Button title="Save" onPress={savePart} />
+        {isSaved && <Text style={styles.healthScore}>Saved ✔️</Text>}
+      </View>
 
-      {isSaved && <Text style={styles.healthScore}>Saved ✔️</Text>}
+      <View style={styles.buttonWrapper}>
+        <Button onPress={savePart}>Save</Button>
+      </View>
     </View>
   );
 }
@@ -161,10 +166,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  contentWrapper: {
+    padding: 8,
   },
   label: {
     fontSize: 18,
@@ -182,5 +186,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 20,
+  },
+  buttonWrapper: {
+    flex: 1,
+    justifyContent: "flex-end",
+    width: "100%",
+    padding: 8,
   },
 });
