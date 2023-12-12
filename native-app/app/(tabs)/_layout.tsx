@@ -1,8 +1,10 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { useColorScheme } from "react-native";
 
+import { useContext } from "react";
 import Colors from "../../constants/Colors";
+import { AuthContext } from "../../contexts/AuthContext";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -16,6 +18,12 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const { userToken } = useContext(AuthContext);
+
+  if (!userToken) {
+    return <Redirect href={"/login"} />;
+  }
 
   return (
     <Tabs

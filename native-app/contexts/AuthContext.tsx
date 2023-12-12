@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { Redirect } from "expo-router";
 import React, {
   PropsWithChildren,
   createContext,
@@ -67,14 +67,6 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!userToken) {
-      router.replace("/login");
-    } else {
-      router.replace("/");
-    }
-  }, [userToken]);
-
-  useEffect(() => {
     UnauthorizedObservable.subscribe(signOut);
 
     return () => {
@@ -94,6 +86,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }}
     >
       {children}
+      <Redirect href={userToken ? "/" : "/login"} />
     </AuthContext.Provider>
   );
 };
