@@ -1,36 +1,47 @@
 # Get started
 
-## Database
+## Quick Start
 
-1. You'll need a Postgres running in your computer
+The quickest way to get things up and running locally is by using docker, so be sure that you already have it installed on your machine!
 
-2. You may also need to install uuid extesion
+> Normally the docker setup files are found in the root of the project, but in this case, as in the backend project there are dependencies files coming from the frontend, I opted for a more creative approach instead of a standardized one to deal with image creation process.
+
+1. Setup `.env` file in the root of the repository, an example of a valid .env you can check below:
+
+```sh
+NODE_ENV="dev"
+
+APP_PORT="3001"
+APP_DOCKER_PORT="3001"
+
+# 64 byte generated string
+# require('crypto').randomBytes(64).toString('hex');
+ACCESS_TOKEN_SECRET="039bd45c9156466d4acc86f4407d05ad794760ac94cf8644394ad3fb37a3e859e0151d6166242bcca9c6c1b9571fc14548929bde893ec9ec7d8f45cc91410c44"
+
+# 64 byte generated string
+# require('crypto').randomBytes(64).toString('hex');
+REFRESH_TOKEN_SECRET="1f07d04376c5e51675dbc06be0ef0201682122629f5c57c3aaf0f64f521abd168869e3192734cc67f3d0593cdae1e9ea76adf644671009de50b57905f6e0a7a6"
+
+POSTGRES_PORT="5432"
+POSTGRES_DOCKER_PORT="5432"
+POSTGRES_HOST="postgresdb"
+POSTGRES_USER_NAME="operator"
+POSTGRES_PASSWORD="1111111"
+POSTGRES_DATABASE_NAME="machinery"
+```
+
+2. Run the script in the root of the repository (not in the root of ./backend)
 
 ```
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+./containerize.sh
 ```
 
-3. After you have the postgres up and running, you'll need to run the migrations
+> If you have permissions issue while running the script above, try to give the permissions for the script with `chmod 755 ./containerize.sh`
 
-```
-yarn migrations:run
-```
+The script above is supposed to:
 
-## Server
-
-1. Setup the .env file (I was using `.env` as file name)
-
-2. Install dependencies
-
-```
-yarn
-```
-
-3. Start the server
-
-```
-yarn start
-```
+- Create a container image of your backend
+- Deploy it using `docker-compose` together with a Postgres image.
 
 # About the app
 
@@ -50,13 +61,13 @@ Tool used to debug and make http calls against the server, also the files that I
 
 ## Future improvements
 
-### Containerization
-
-It's a lot of effort to configure and run locally directly on host machine a Postgres database, containerization could not only reduce a lot of this initial effort, but also make it more flexible to database changes.
-
 ### Data validators
 
 In frameworks like NestJS they recommend to use tools like [class-validator](https://github.com/typestack/class-validator) for data validation. Those validators are massively useful, mainly to use on middlewares to check wether the data sent on request is structurally correct. In this project I would use the zod which has some great features like automatic typing for objects.
+
+### API versioning strategy
+
+As the projects starts to grow, more functionalities get added to it. For that, versioning strategies are crucial to keep a backwards compatibility. There are several ways to deal with that, so it's would be great to align with the CTO/tech team what would be the best one for the current needs.
 
 ### Tests
 
