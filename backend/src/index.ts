@@ -3,7 +3,7 @@ import "reflect-metadata";
 import { app } from "./app";
 import { bootstrap } from "./bootstrap";
 
-const port = 3001;
+const port = process.env.APP_PORT || 3001;
 
 const main = async () => {
   await bootstrap();
